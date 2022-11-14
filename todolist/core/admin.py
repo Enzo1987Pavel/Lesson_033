@@ -3,13 +3,15 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 from .models import User
 
+admin.site.site_header = "Модуль 7 SkyPro"
+admin.site.site_title = "Домашка 33"
+admin.site.index_title = "Редактирование пользователей"
+
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = ("username", "first_name", "last_name", "email")  # Отображение полей в Админке
-    search_fields = ("username", "first_name", "last_name", "email")  # Поиск по полям в Админке
+    list_display = ("username", "email", "first_name", "last_name")  # Отображение полей в Админке
+    search_fields = ("email", "first_name", "last_name", "username")  # Поиск по полям в Админке
     list_filter = ("is_staff", "is_active", "is_superuser")  # Фильтры по полям в Админке
-
-
-class PostCodesAdmin(admin.ModelAdmin):
-    exclude = ("password",)  # Скрываем поле "Пароль" в Админке
+    exclude = ('password',)  # Скрываем поле "Пароль" в Админке
+    readonly_fields = ("last_login", "date_joined")  # Поля только для чтения в Админке
