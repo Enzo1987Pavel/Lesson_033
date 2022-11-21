@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import User
 
 admin.site.site_header = "Модуль 7 SkyPro"
-admin.site.site_title = "Домашка 33"
+admin.site.site_title = "Диплом"
 admin.site.index_title = "Редактирование пользователей"
 
 
