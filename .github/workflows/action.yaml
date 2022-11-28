@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: clone code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       - name: docker build
         run: docker build -t enzo1987pavel/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
       - name: docker login
@@ -19,18 +19,14 @@ jobs:
     needs: build_and_push
     env:
       DEBUG: ${{ secrets.DEBUG }}
-#      SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }}
-#      SOCIAL_AUTH_VK_OAUTH2_SECRET: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-#      ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
-#      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       POSTGRES_HOST: ${{ secrets.HOST }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
     steps:
       - name: clone code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       - name: render configs
         run: |
           mkdir deploy
