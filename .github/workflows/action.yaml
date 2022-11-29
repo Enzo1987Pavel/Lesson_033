@@ -50,5 +50,4 @@ jobs:
           script: |
             cd todolist
             docker-compose down
-#            docker system prune --all
             docker-compose up -d
