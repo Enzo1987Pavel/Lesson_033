@@ -8,11 +8,10 @@ services:
       - api
     ports:
       - "80:80"
-
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: lesson_033-api
+#      context: .
+#      dockerfile: Dockerfile
     restart: always
     env_file:
       - .env
