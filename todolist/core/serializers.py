@@ -37,7 +37,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class LoginSerializer(serializers.ModelSerializer):
+class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
     password = serializers.CharField(required=True, write_only=True)
 
@@ -54,3 +54,32 @@ class LoginSerializer(serializers.ModelSerializer):
         model = USER_MODEL
         fields = "__all__"
 
+
+class ProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = USER_MODEL
+        fields = ("id", "username", "first_name", "last_name", "email")
+
+
+class UpdatePasswordSerializer(serializers.Serializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    old_password = serializers.CharField(required=True, write_only=True)
+    new_password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, data):
+        user = data["user"]
+        if not user.check_password(data["old_password"]):
+            raise serializers.ValidationError({"old_password": "Введен неверный пароль!"})
+
+        try:
+            validate_password(data["new_password"])
+        except Exception as e:
+            raise serializers.ValidationError({"new_password": e.messages})
+
+        return data
+
+    def update(self, instance, validated_data):
+        instance.password = make_password(validated_data["new_password"])
+        instance.save()
+        return instance
