@@ -15,7 +15,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: enzo1987/python_diploma
+    image: enzo1987/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
     depends_on:
@@ -55,6 +55,6 @@ services:
       timeout: 5s
       retries: 5
 
-      
+
 volumes:
   pg_data:
