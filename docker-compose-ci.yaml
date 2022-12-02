@@ -3,7 +3,6 @@ version: "3.9"
 services:
   frontend:
     image: sermalenk/skypro-front:lesson-35
-    restart: always
     depends_on:
       - api
     ports:
@@ -11,7 +10,6 @@ services:
 
   api:
     image: enzo1987/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-#    restart: always
     depends_on:
       db:
         condition: service_healthy
@@ -33,7 +31,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: python3 ./manage.py migrate
+    command: >
+      bash -c 'python3 manage.py makemigrations && python3 manage.py migrate'
 
   db:
     image: postgres:14.6-alpine

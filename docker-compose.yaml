@@ -3,7 +3,6 @@ version: "3.9"
 services:
   frontend:
     image: sermalenk/skypro-front:lesson-35
-    restart: always
     depends_on:
       - api
     ports:
@@ -18,6 +17,7 @@ services:
     image: enzo1987/python_diploma
     env_file:
       - .env
+    restart: always
     depends_on:
       db:
         condition: service_healthy
@@ -34,7 +34,8 @@ services:
         condition: service_healthy
     env_file:
       - .env
-    command: python manage.py migrate
+    command: >
+      bash -c 'python3 manage.py makemigrations && python3 manage.py migrate'
 
   db:
     image: postgres:14.6-alpine
