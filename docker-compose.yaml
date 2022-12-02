@@ -7,8 +7,8 @@ services:
       - api
     ports:
       - "80:80"
-    volumes:
-      - ./nginx.conf:/ect/nginx/conf.d/default.conf
+#    volumes:
+#      - ./nginx.conf:/ect/nginx/conf.d/default.conf
 
   api:
     build:
@@ -34,8 +34,7 @@ services:
         condition: service_healthy
     env_file:
       - .env
-    command: >
-      sh -c "python3 ./manage.py makemigrations && python3 ./manage.py migrate"
+    command: python3 ./manage.py migrate
 
   db:
     image: postgres:14.6-alpine
