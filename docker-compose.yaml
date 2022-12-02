@@ -16,7 +16,6 @@ services:
       context: .
       dockerfile: Dockerfile
     image: enzo1987/python_diploma
-    restart: always
     env_file:
       - .env
     depends_on:
