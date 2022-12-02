@@ -10,7 +10,7 @@ services:
       - "80:80"
 
   api:
-    image: enzo1987/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: enzo1987pavel/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     restart: always
     depends_on:
       db:
@@ -19,7 +19,7 @@ services:
         condition: service_completed_successfully
 
   migrations:
-    image: enzo1987/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: enzo1987pavel/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     environment:
       DEBUG: ${DEBUG}
       SECRET_KEY: ${SECRET_KEY}

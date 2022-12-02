@@ -15,7 +15,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: enzo1987/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: enzo1987pavel/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
     depends_on:
