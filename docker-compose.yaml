@@ -8,6 +8,8 @@ services:
       - api
     ports:
       - "80:80"
+    volumes:
+      - ./nginx.conf:/ect/nginx/conf.d/default.conf
 
   api:
     build:
