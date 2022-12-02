@@ -8,11 +8,14 @@ services:
       - api
     ports:
       - "80:80"
+    volumes:
+      - ./nginx.conf:/ect/nginx/conf.d/default.conf
 
   api:
     build:
       context: .
       dockerfile: Dockerfile
+    image: enzo1987/python_diploma
     env_file:
       - .env
     depends_on:
