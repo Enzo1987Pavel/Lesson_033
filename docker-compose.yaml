@@ -15,7 +15,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: enzo1987/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    restart: always
     env_file:
       - .env
     depends_on:
@@ -35,7 +35,7 @@ services:
     env_file:
       - .env
     command: >
-      bash -c 'python3 manage.py makemigrations && python3 manage.py migrate'
+      sh -c 'python3 ./manage.py makemigrations && python3 ./manage.py migrate'
 
   db:
     image: postgres:14.6-alpine

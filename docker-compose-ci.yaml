@@ -31,7 +31,7 @@ services:
       db:
         condition: service_healthy
     command: >
-      bash -c 'python3 manage.py makemigrations && python3 manage.py migrate'
+      sh -c 'python3 ./manage.py makemigrations && python3 ./manage.py migrate'
 
   db:
     image: postgres:14.6-alpine
