@@ -26,6 +26,8 @@ jobs:
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+      SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }}
+      SOCIAL_AUTH_VK_OAUTH2_SECRET: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }}
     steps:
       - name: clone code
         uses: actions/checkout@v2
@@ -40,7 +42,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "deploy/docker-compose.yaml"
+          source: "deploy/docker-compose.yaml,deploy/.env"
           target: "todolist"
           strip_components: 1
       - name: deploy app
