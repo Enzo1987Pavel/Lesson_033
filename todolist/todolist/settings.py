@@ -50,7 +50,7 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "corsheaders",
-    'social_django',
+    "social_django",
 ]
 
 MIDDLEWARE = [
@@ -79,6 +79,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -145,12 +147,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["email", "notify"]
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["email"]
 
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.vk.VKOAuth2",
     "django.contrib.auth.backends.ModelBackend",
 )
+
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = env.str("SOCIAL_AUTH_VK_OAUTH2_KEY")
@@ -159,7 +162,7 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/logged-in/"
 SOCIAL_AUTH_LOGIN_ERROR_URL = "/login-error/"
 SOCIAL_AUTH_URL_NAMESPACE = "social"
 
-SOCIAL_AUTH_VK_APP_KEY = ""
-SOCIAL_AUTH_VK_APP_SECRET = ""
+# SOCIAL_AUTH_VK_APP_KEY = ""
+# SOCIAL_AUTH_VK_APP_SECRET = ""
 
 AUTH_USER_MODEL = "core.User"
