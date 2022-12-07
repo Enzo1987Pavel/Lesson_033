@@ -1,3 +1,15 @@
 from django.contrib import admin
 
-# Register your models here.
+from goals.models import GoalCategory
+
+admin.site.site_header = "Модуль 7 SkyPro"
+admin.site.site_title = "Диплом"
+admin.site.index_title = "Редактирование целей"
+
+
+class GoalCategoryAdmin(admin.ModelAdmin):
+    list_display = ("title", "user", "created", "updated")
+    search_fields = ("title", "user")
+
+
+admin.site.register(GoalCategory, GoalCategoryAdmin)
