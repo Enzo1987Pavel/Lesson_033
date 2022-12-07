@@ -94,11 +94,7 @@ class GoalCommentListView(generics.ListAPIView):
     model = GoalComment
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCommentSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.OrderingFilter,
-        filters.SearchFilter,
-    ]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ["goal"]
     ordering = ["-created"]
 
