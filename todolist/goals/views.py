@@ -99,9 +99,17 @@ class GoalCommentListView(generics.ListAPIView):
         filters.OrderingFilter,
         filters.SearchFilter,
     ]
-    filterset_class = GoalDateFilter
     ordering_fields = ["goal"]
     ordering = ["-created"]
 
     def get_queryset(self):
         return GoalComment.objects.filter(user=self.request.user)
+
+
+class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
+    model = GoalComment
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = GoalCommentSerializer
+
+    def get_queryset(self):
+        return Goal.objects.filter(user=self.request.user)
