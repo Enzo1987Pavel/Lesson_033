@@ -47,10 +47,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     "core",
+    "goals",
 
     "rest_framework",
     "corsheaders",
     "social_django",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -162,7 +164,10 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/logged-in/"
 SOCIAL_AUTH_LOGIN_ERROR_URL = "/login-error/"
 SOCIAL_AUTH_URL_NAMESPACE = "social"
 
-# SOCIAL_AUTH_VK_APP_KEY = ""
-# SOCIAL_AUTH_VK_APP_SECRET = ""
 
 AUTH_USER_MODEL = "core.User"
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+}
