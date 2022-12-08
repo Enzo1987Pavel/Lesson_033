@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from core.models import User
+
 
 class GoalCategory(models.Model):
     class Meta:
@@ -56,12 +58,12 @@ class Goal(models.Model):
 
 class GoalComment(models.Model):
     class Meta:
-        verbose_name = "Комментарий"
-        verbose_name_plural = "Комментарии"
+        verbose_name = "Комментарий к цели"
+        verbose_name_plural = "Комментарии к целям"
 
-    text = models.TextField(verbose_name="Название", max_length=255)
-    goal = models.ForeignKey(Goal, verbose_name="Цель", on_delete=models.PROTECT, related_name="comments")
-    user = models.ForeignKey("core.User", verbose_name="Автор", on_delete=models.PROTECT, related_name="comments")
+    text = models.TextField(verbose_name="Текст")
+    user = models.ForeignKey(User, verbose_name="Автор", related_name="goal_comments", on_delete=models.PROTECT)
+    goal = models.ForeignKey(Goal, verbose_name="Цель", related_name="goal_comments", on_delete=models.PROTECT)
     created = models.DateTimeField(verbose_name="Дата создания")
     updated = models.DateTimeField(verbose_name="Дата последнего обновления")
 
