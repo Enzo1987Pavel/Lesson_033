@@ -43,6 +43,8 @@ class GoalCategoryView(generics.RetrieveUpdateDestroyAPIView):
     def perform_destroy(self, instance):
         instance.is_deleted = True
         instance.save()
+        instance.GoalCategory.update(is_delete=True)
+        Goal.objects.filter(goal_category=instance).update(status=Goal.Status.archived)
         return instance
 
 
