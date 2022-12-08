@@ -90,6 +90,9 @@ class GoalCommentCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCommentCreateSerializer
 
+    def perform_create(self, serializer: GoalCommentCreateSerializer):
+        serializer.save(goal_id=self.request.data["goal"])
+
 
 class GoalCommentListView(generics.ListAPIView):
     model = GoalComment
