@@ -90,6 +90,9 @@ class GoalCommentCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCommentCreateSerializer
 
+    def perform_create(self, serializer: GoalCommentCreateSerializer):
+        serializer.save(goal_id=self.request.data["goal"])
+
 
 class GoalCommentListView(generics.ListAPIView):
     model = GoalComment
@@ -110,4 +113,4 @@ class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GoalCommentSerializer
 
     def get_queryset(self):
-        return Goal.objects.filter(user=self.request.user)
+        return GoalComment.objects.filter(user=self.request.user)
