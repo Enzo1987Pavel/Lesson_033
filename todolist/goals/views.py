@@ -113,4 +113,4 @@ class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GoalCommentSerializer
 
     def get_queryset(self):
-        return Goal.objects.filter(user=self.request.user)
+        return GoalComment.objects.filter(user=self.request.user)
