@@ -1,3 +1,4 @@
+from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, filters, generics
 from rest_framework.pagination import LimitOffsetPagination
@@ -40,9 +41,16 @@ class GoalCategoryView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return GoalCategory.objects.filter(user=self.request.user, is_deleted=False)
 
+    # def perform_destroy(self, instance):
+    #     instance.is_deleted = True
+    #     instance.save()
+    #     return instance
+
     def perform_destroy(self, instance):
-        instance.is_deleted = True
-        instance.save()
+        with transaction.atomic():
+            instance.is_deleted = True
+            instance.save()
+            Goal.objects.filter(category=instance).update(status=Goal.Status.archived)
         return instance
 
 
