@@ -6,7 +6,7 @@ from rest_framework.pagination import LimitOffsetPagination
 
 from goals.filters import GoalDateFilter
 from goals.models import GoalCategory, Goal, GoalComment, Board
-from goals.permissions import BoardPermissions, CommentPermissions
+from goals.permissions import BoardPermissions, CommentPermissions, CategoryPermissions, GoalPermissions
 from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalCategoryCreateSerializer, \
     GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer, BoardCreateSerializer, BoardSerializer, \
     BoardListSerializer
@@ -29,7 +29,7 @@ class GoalCategoryListView(generics.ListAPIView):
         filters.SearchFilter,
     ]
     filterset_fields = ["board", "user"]
-    ordering_fields = ["title", "date_created"]
+    ordering_fields = ["title", "created"]
     ordering = ["title"]
     search_fields = ["title"]
 
@@ -40,7 +40,7 @@ class GoalCategoryListView(generics.ListAPIView):
 class GoalCategoryView(generics.RetrieveUpdateDestroyAPIView):
     model = GoalCategory
     serializer_class = GoalCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, CategoryPermissions]
 
     def get_queryset(self):
         return GoalCategory.objects.filter(board__participants__user=self.request.user, is_deleted=False)
@@ -81,7 +81,7 @@ class GoalListView(generics.ListAPIView):
 class GoalView(generics.RetrieveUpdateDestroyAPIView):
     model = Goal
     serializer_class = GoalSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, GoalPermissions]
 
     def get_queryset(self):
         return Goal.objects.filter(category__board__participants__user=self.request.user)
@@ -101,6 +101,15 @@ class GoalCommentCreateView(generics.CreateAPIView):
         serializer.save(goal_id=self.request.data["goal"])
 
 
+class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
+    model = GoalComment
+    permission_classes = [permissions.IsAuthenticated, CommentPermissions]
+    serializer_class = GoalCommentSerializer
+
+    def get_queryset(self):
+        return GoalComment.objects.filter(goal__category__board__participants__user=self.request.user)
+
+
 class GoalCommentListView(generics.ListAPIView):
     model = GoalComment
     permission_classes = [permissions.IsAuthenticated]
@@ -114,20 +123,23 @@ class GoalCommentListView(generics.ListAPIView):
         return GoalComment.objects.filter(goal__category__board__participants__user=self.request.user)
 
 
-class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
-    model = GoalComment
-    permission_classes = [permissions.IsAuthenticated, CommentPermissions]
-    serializer_class = GoalCommentSerializer
-
-    def get_queryset(self):
-        return GoalComment.objects.filter(goal__category__board__participants__user=self.request.user)
-
-
 # Board's views
 class BoardCreateView(CreateAPIView):
     model = Board
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = BoardCreateSerializer
+
+
+class BoardListView(ListAPIView):
+    model = Board
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = LimitOffsetPagination
+    serializer_class = BoardListSerializer
+    filter_backends = [filters.OrderingFilter]
+    ordering = ["title"]
+
+    def get_queryset(self):
+        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
 
 
 class BoardView(RetrieveUpdateDestroyAPIView):
@@ -145,15 +157,3 @@ class BoardView(RetrieveUpdateDestroyAPIView):
             instance.categories.update(is_deleted=True)
             Goal.objects.filter(category__board=instance).update(status=Goal.Status.archived)
         return instance
-
-
-class BoardListView(ListAPIView):
-    model = Board
-    permission_classes = [permissions.IsAuthenticated]
-    pagination_class = LimitOffsetPagination
-    serializer_class = BoardListSerializer
-    filter_backends = [filters.OrderingFilter]
-    ordering = ["title"]
-
-    def get_queryset(self):
-        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
