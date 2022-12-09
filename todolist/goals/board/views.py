@@ -27,7 +27,9 @@ class BoardView(RetrieveUpdateDestroyAPIView):
             instance.is_deleted = True
             instance.save()
             instance.categories.update(is_deleted=True)
-            Goal.objects.filter(category__board=instance).update(status=Goal.Status.archived)
+            Goal.objects.filter(category__board=instance).update(
+                status=Goal.Status.archived
+            )
         return instance
 
 
@@ -36,7 +38,9 @@ class BoardListView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = LimitOffsetPagination
     serializer_class = BoardListSerializer
-    filter_backends = [filters.OrderingFilter]
+    filter_backends = [
+        filters.OrderingFilter,
+    ]
     ordering = ["title"]
 
     def get_queryset(self):
