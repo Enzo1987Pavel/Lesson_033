@@ -4,7 +4,7 @@ from rest_framework import permissions, filters, generics
 from rest_framework.pagination import LimitOffsetPagination
 
 from goals.filters import GoalDateFilter
-from goals.models import GoalCategory, Goal, GoalComment
+from goals.models.models import GoalCategory, Goal, GoalComment
 from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalCategoryCreateSerializer, \
     GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer
 
