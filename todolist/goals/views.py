@@ -1,12 +1,15 @@
 from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, filters, generics
+from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.pagination import LimitOffsetPagination
 
 from goals.filters import GoalDateFilter
-from goals.models.models import GoalCategory, Goal, GoalComment
+from goals.models.models import GoalCategory, Goal, GoalComment, Board
+from goals.permissions import BoardPermissions
 from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, GoalCategoryCreateSerializer, \
-    GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer
+    GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer, BoardCreateSerializer, BoardSerializer, \
+    BoardListSerializer
 
 
 class GoalCategoryCreateView(generics.CreateAPIView):
@@ -117,3 +120,43 @@ class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return GoalComment.objects.filter(user=self.request.user)
+
+
+# Board's views
+class BoardCreateView(CreateAPIView):
+    model = Board
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = BoardCreateSerializer
+
+
+class BoardView(RetrieveUpdateDestroyAPIView):
+    model = Board
+    permission_classes = [permissions.IsAuthenticated, BoardPermissions]
+    serializer_class = BoardSerializer
+
+    def get_queryset(self):
+        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
+
+    def perform_destroy(self, instance: Board):
+        with transaction.atomic():
+            instance.is_deleted = True
+            instance.save()
+            instance.categories.update(is_deleted=True)
+            Goal.objects.filter(category__board=instance).update(
+                status=Goal.Status.archived
+            )
+        return instance
+
+
+class BoardListView(ListAPIView):
+    model = Board
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = LimitOffsetPagination
+    serializer_class = BoardListSerializer
+    filter_backends = [
+        filters.OrderingFilter,
+    ]
+    ordering = ["title"]
+
+    def get_queryset(self):
+        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
