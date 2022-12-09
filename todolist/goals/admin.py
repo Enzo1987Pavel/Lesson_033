@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from goals.models.models import GoalCategory
+from goals.models import GoalCategory
 
 admin.site.site_header = "Модуль 7 SkyPro"
 admin.site.site_title = "Диплом"
