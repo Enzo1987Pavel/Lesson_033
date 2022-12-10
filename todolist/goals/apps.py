@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
-VERBOSE_APP_NAME = "Список досок и категорий"
+VERBOSE_APP_NAME = "Список досок, категорий и целей"
 
 
 class GoalsConfig(AppConfig):

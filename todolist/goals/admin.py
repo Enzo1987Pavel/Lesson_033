@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from goals.models import GoalCategory, Board
+from goals.models import GoalCategory, Board, GoalComment, Goal
 
 admin.site.site_header = "Модуль 7 SkyPro"
 admin.site.site_title = "Диплом"
@@ -14,3 +14,5 @@ class GoalCategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(GoalCategory, GoalCategoryAdmin)
 admin.site.register(Board)
+admin.site.register(GoalComment)
+admin.site.register(Goal)
