@@ -1,6 +1,6 @@
 ﻿# Python_diploma
 
-### Lesson 36
+### Lesson 37
 
 * Python 3.10
 * Django 4.0.1
