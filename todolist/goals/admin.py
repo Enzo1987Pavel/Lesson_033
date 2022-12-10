@@ -4,7 +4,7 @@ from goals.models import GoalCategory, Board
 
 admin.site.site_header = "Модуль 7 SkyPro"
 admin.site.site_title = "Диплом"
-admin.site.index_title = "Редактирование целей"
+admin.site.index_title = "TodoList"
 
 
 class GoalCategoryAdmin(admin.ModelAdmin):

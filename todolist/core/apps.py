@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
-VERBOSE_APP_NAME = "Дипломный проект"
+VERBOSE_APP_NAME = "Список пользователей"
 
 
 class CoreConfig(AppConfig):

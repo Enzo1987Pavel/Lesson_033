@@ -5,7 +5,7 @@ from .models import User
 
 admin.site.site_header = "Модуль 7 SkyPro"
 admin.site.site_title = "Диплом"
-admin.site.index_title = "Редактирование пользователей"
+admin.site.index_title = "TodoList"
 
 
 @admin.register(User)
