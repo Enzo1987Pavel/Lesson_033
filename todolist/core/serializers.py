@@ -45,7 +45,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, write_only=True)
 
     def create(self, validated_data):
-        """Функция создания пользователя по имени 'username' и паролю 'password',
+        """Функция создания пользователя с использованием имени 'username' и пароля 'password',
             если введенные данные были верны (имя и пароль)"""
         user = authenticate(
             username=validated_data["username"],
