@@ -48,6 +48,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate_category(self, value):
+        """Проверка на валидность роли пользователя (владелец или редактор), а также на существование категории"""
         if value.is_deleted:
             raise serializers.ValidationError("Категория была удалена! Никакие действия не возможны!")
 
@@ -69,7 +70,8 @@ class GoalSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate_category(self, value):
-        """Проверка на валидность категории (удалена или нет) и запрет переноса категорий между проектами"""
+        """Проверка на валидность категории (удалена или нет), к которой принадлежит цель и
+            запрет переноса категорий между проектами"""
         if value.is_deleted:
             raise serializers.ValidationError("Категория была удалена! Никакие действия не возможны!")
 
@@ -117,6 +119,7 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validated_data):
+        """Создание доски пользователем, который по умолчанию является ее владельцем"""
         user = validated_data.pop("user")
         board = Board.objects.create(**validated_data)
         BoardParticipant.objects.create(user=user, board=board, role=BoardParticipant.Role.owner)
