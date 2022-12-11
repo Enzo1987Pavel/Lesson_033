@@ -13,16 +13,15 @@ from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, Goal
 
 
 class GoalCategoryCreateView(generics.CreateAPIView):
-    """Класс создания категорий для целей, с использованием модели категорий (model),
-        выданных разрешений (permission_classes) и
-        сериализатора (serializer_class)"""
+    """Класс создания категорий, с использованием модели категорий (model),
+        выданных разрешений (permission_classes) и сериализатора (serializer_class)"""
     model = GoalCategory
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCategoryCreateSerializer
 
 
 class GoalCategoryListView(generics.ListAPIView):
-    """Класс отображения списка категорий для целей, с использованием модели категорий (model),
+    """Класс отображения списка категорий, с использованием модели категорий (model),
         выданных разрешений (permission_classes), сериализатора (serializer_class), пагинатора (pagination_class) и
         фильтров (filter_backends)"""
     model = GoalCategory
@@ -45,9 +44,8 @@ class GoalCategoryListView(generics.ListAPIView):
 
 
 class GoalCategoryView(generics.RetrieveUpdateDestroyAPIView):
-    """Класс отображения/изменения/удаления списка категорий для целей, с использованием модели категорий (model),
-        выданных разрешений (permission_classes), сериализатора (serializer_class), пагинатора (pagination_class) и
-        фильтров (filter_backends)"""
+    """Класс отображения/изменения/удаления списка категорий, с использованием модели категорий (model),
+        выданных разрешений (permission_classes) и сериализатора (serializer_class)"""
     model = GoalCategory
     serializer_class = GoalCategorySerializer
     permission_classes = [permissions.IsAuthenticated, CategoryPermissions]
@@ -74,7 +72,7 @@ class GoalCreateView(generics.CreateAPIView):
 
 
 class GoalListView(generics.ListAPIView):
-    """Класс отображения списка категорий для целей, с использованием модели категорий (model),
+    """Класс отображения списка целей, с использованием модели целей (model),
         выданных разрешений (permission_classes), сериализатора (serializer_class), пагинатора (pagination_class) и
         фильтров (filter_backends)"""
     model = Goal
@@ -115,26 +113,21 @@ class GoalView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class GoalCommentCreateView(generics.CreateAPIView):
+    """Класс создания комментариев к целям, с использованием модели комментариев (model),
+        выданных разрешений (permission_classes) и сериализатора (serializer_class)"""
     model = GoalComment
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCommentCreateSerializer
 
     def perform_create(self, serializer: GoalCommentCreateSerializer):
-        """Для сохранения нового экземпляра объекта (цели)"""
+        """Для сохранения нового экземпляра объекта (комментария)"""
         serializer.save(goal_id=self.request.data["goal"])
 
 
-class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
-    model = GoalComment
-    permission_classes = [permissions.IsAuthenticated, CommentPermissions]
-    serializer_class = GoalCommentSerializer
-
-    def get_queryset(self):
-        """Переопределенное значение при использовании фильтров для поиска значений"""
-        return GoalComment.objects.filter(goal__category__board__participants__user=self.request.user)
-
-
 class GoalCommentListView(generics.ListAPIView):
+    """Класс отображения списка комментариев к целям, с использованием модели комментариев (model),
+        выданных разрешений (permission_classes), сериализатора (serializer_class),
+        пагинатора (pagination_class) и фильтров (filter_backends)"""
     model = GoalComment
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCommentSerializer
@@ -148,14 +141,32 @@ class GoalCommentListView(generics.ListAPIView):
         return GoalComment.objects.filter(goal__category__board__participants__user=self.request.user)
 
 
+class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
+    """Класс отображения/изменения/удаления списка комментариев к целям,
+        с использованием модели комментариев (model), выданных разрешений (permission_classes)
+        и сериализатора (serializer_class)"""
+    model = GoalComment
+    permission_classes = [permissions.IsAuthenticated, CommentPermissions]
+    serializer_class = GoalCommentSerializer
+
+    def get_queryset(self):
+        """Переопределенное значение при использовании фильтров для поиска значений"""
+        return GoalComment.objects.filter(goal__category__board__participants__user=self.request.user)
+
+
 # Board's views
 class BoardCreateView(CreateAPIView):
+    """Класс создания досок, с использованием модели досок (model),
+        выданных разрешений (permission_classes) и сериализатора (serializer_class)"""
     model = Board
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = BoardCreateSerializer
 
 
 class BoardListView(ListAPIView):
+    """Класс отображения списка досок, с использованием модели досок (model),
+        выданных разрешений (permission_classes), сериализатора (serializer_class),
+        пагинатора (pagination_class) и фильтров (filter_backends)"""
     model = Board
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = LimitOffsetPagination
@@ -169,6 +180,9 @@ class BoardListView(ListAPIView):
 
 
 class BoardView(RetrieveUpdateDestroyAPIView):
+    """Класс отображения/изменения/удаления списка досок,
+        с использованием модели досок (model), выданных разрешений (permission_classes)
+        и сериализатора (serializer_class)"""
     model = Board
     permission_classes = [permissions.IsAuthenticated, BoardPermissions]
     serializer_class = BoardSerializer
@@ -178,7 +192,7 @@ class BoardView(RetrieveUpdateDestroyAPIView):
         return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
 
     def perform_destroy(self, instance: Board):
-        """Удаление экземпляра объекта. В данном случае - его архивация"""
+        """Удаление экземпляра объекта. В данном случае: удаление доски и архивация целей"""
         with transaction.atomic():
             instance.is_deleted = True
             instance.save()
