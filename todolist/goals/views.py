@@ -13,12 +13,18 @@ from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, Goal
 
 
 class GoalCategoryCreateView(generics.CreateAPIView):
+    """Класс создания категорий для целей, с использованием модели категорий (model),
+    разрешений (permission_classes) и
+    сериализатора (serializer_class)"""
     model = GoalCategory
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCategoryCreateSerializer
 
 
 class GoalCategoryListView(generics.ListAPIView):
+    """Класс отображения списка категорий для целей, с использованием модели категорий (model),
+    разрешений (permission_classes), сериализатора (serializer_class), пагинатора (pagination_class)
+    и фильтров (filter_backends)"""
     model = GoalCategory
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCategorySerializer
@@ -34,6 +40,7 @@ class GoalCategoryListView(generics.ListAPIView):
     search_fields = ["title"]
 
     def get_queryset(self):
+        """Переопределенное значение при использовании фильтров для поиска значений"""
         return GoalCategory.objects.filter(board__participants__user=self.request.user, is_deleted=False)
 
 
@@ -43,6 +50,7 @@ class GoalCategoryView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, CategoryPermissions]
 
     def get_queryset(self):
+        """Переопределенное значение при использовании фильтров для поиска значений"""
         return GoalCategory.objects.filter(board__participants__user=self.request.user, is_deleted=False)
 
     def perform_destroy(self, instance):

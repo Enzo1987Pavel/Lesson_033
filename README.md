@@ -4,7 +4,7 @@
 
 * Python 3.10
 * Django 4.0.1
-* Postgres
+* Postgres 14.6-alpine
 ##
 #### Файл `"docker-compose.yaml"` содержит контейнер с базой данных Postgres, который разворачивается при вызове в терминале команды `docker-compose up -d`.
 #### Файл `"docker-compose-ci.yaml"` для разворачивания приложения на сервере.

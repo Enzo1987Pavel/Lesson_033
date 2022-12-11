@@ -13,6 +13,6 @@ class GoalCategoryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(GoalCategory, GoalCategoryAdmin)
-admin.site.register(Board)
-admin.site.register(GoalComment)
 admin.site.register(Goal)
+admin.site.register(GoalComment)
+admin.site.register(Board)

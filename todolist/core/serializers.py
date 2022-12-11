@@ -9,10 +9,12 @@ USER_MODEL = get_user_model()
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    """Сериализатор для регистрации пользователя с помощью пароля"""
     password = serializers.CharField(write_only=True)
     password_repeat = serializers.CharField(write_only=True)
 
     def validate(self, data_password):
+        """Функция проверки паролей на идентичность"""
         password = data_password.get("password")
         password_repeat = data_password.pop("password_repeat")
 
@@ -26,6 +28,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return data_password
 
     def create(self, validated_data):
+        """Функция создания и хэширования пароля"""
         password = validated_data.get("password")
 
         validated_data["password"] = make_password(password)
@@ -42,6 +45,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, write_only=True)
 
     def create(self, validated_data):
+        """Функция создания пользователя по имени 'username' и паролю 'password'"""
         user = authenticate(
             username=validated_data["username"],
             password=validated_data["password"],
