@@ -16,6 +16,7 @@ class GoalCategoryCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate_board(self, value):
+        """Проверка на валидность роли пользователя (владелец или редактор), а также на существование доски"""
         if value.is_deleted:
             raise serializers.ValidationError("Проект был удален! Никакие действия не возможны!")
         allow = BoardParticipant.objects.filter(
@@ -68,6 +69,7 @@ class GoalSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate_category(self, value):
+        """Проверка на валидность категории (удалена или нет) и запрет переноса категорий между проектами"""
         if value.is_deleted:
             raise serializers.ValidationError("Категория была удалена! Никакие действия не возможны!")
 
