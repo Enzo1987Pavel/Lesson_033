@@ -134,7 +134,7 @@ class GoalCommentListView(generics.ListAPIView):
     pagination_class = LimitOffsetPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ["goal"]  # Поля, по которым производится сортировка
-    ordering = ["-created"]  # Сортировка по дате создания комментария (самые поздние комментарии - вверху)
+    ordering = ["-created"]  # Сортировка по дате создания комментария (последние комментарии - вверху)
 
     def get_queryset(self):
         """Переопределенное значение при использовании фильтров для поиска значений"""
