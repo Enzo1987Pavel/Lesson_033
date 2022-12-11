@@ -86,6 +86,7 @@ class GoalCommentCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate_goal(self, value):
+        """Проверка на валидность роли пользователя (владелец или редактор)"""
         if not BoardParticipant.objects.filter(
             board_id=value.category.board_id,
             role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer],

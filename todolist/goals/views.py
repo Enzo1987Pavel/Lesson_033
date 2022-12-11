@@ -86,7 +86,7 @@ class GoalListView(generics.ListAPIView):
         filters.OrderingFilter,
         filters.SearchFilter,
     ]
-    filterset_class = GoalDateFilter
+    filterset_class = GoalDateFilter  # Фильтр, определенный в файле 'filters.py'
     ordering_fields = ["due_date", "priority"]  # Поля, по которым производится сортировка (дата дедлайна и приоритет)
     ordering = ["priority", "due_date"]  # Сортировка целей (по дате дедлайна и приоритету)
     search_fields = ["title", "description"]  # Поля, по которым производится поиск целей (по названию и описанию)
@@ -97,6 +97,8 @@ class GoalListView(generics.ListAPIView):
 
 
 class GoalView(generics.RetrieveUpdateDestroyAPIView):
+    """Класс отображения/изменения/удаления списка целей, с использованием модели целей (model),
+        выданных разрешений (permission_classes) и сериализатора (serializer_class)"""
     model = Goal
     serializer_class = GoalSerializer
     permission_classes = [permissions.IsAuthenticated, GoalPermissions]
@@ -106,7 +108,7 @@ class GoalView(generics.RetrieveUpdateDestroyAPIView):
         return Goal.objects.filter(category__board__participants__user=self.request.user)
 
     def perform_destroy(self, instance):
-        """Удаление экземпляра объекта. В данном случае - его архивация"""
+        """Удаление экземпляра объекта (целей). В данном случае - его архивация"""
         instance.status = Goal.Status.archived
         instance.save()
         return instance
@@ -118,6 +120,7 @@ class GoalCommentCreateView(generics.CreateAPIView):
     serializer_class = GoalCommentCreateSerializer
 
     def perform_create(self, serializer: GoalCommentCreateSerializer):
+        """Для сохранения нового экземпляра объекта (цели)"""
         serializer.save(goal_id=self.request.data["goal"])
 
 
