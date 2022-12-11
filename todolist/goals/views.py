@@ -14,8 +14,8 @@ from goals.serializers import GoalCreateSerializer, GoalCategorySerializer, Goal
 
 class GoalCategoryCreateView(generics.CreateAPIView):
     """Класс создания категорий для целей, с использованием модели категорий (model),
-    разрешений (permission_classes) и
-    сериализатора (serializer_class)"""
+        выданных разрешений (permission_classes) и
+        сериализатора (serializer_class)"""
     model = GoalCategory
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCategoryCreateSerializer
@@ -23,8 +23,8 @@ class GoalCategoryCreateView(generics.CreateAPIView):
 
 class GoalCategoryListView(generics.ListAPIView):
     """Класс отображения списка категорий для целей, с использованием модели категорий (model),
-    разрешений (permission_classes), сериализатора (serializer_class), пагинатора (pagination_class)
-    и фильтров (filter_backends)"""
+        выданных разрешений (permission_classes), сериализатора (serializer_class), пагинатора (pagination_class) и
+        фильтров (filter_backends)"""
     model = GoalCategory
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCategorySerializer
@@ -34,10 +34,10 @@ class GoalCategoryListView(generics.ListAPIView):
         filters.OrderingFilter,
         filters.SearchFilter,
     ]
-    filterset_fields = ["board", "user"]
-    ordering_fields = ["title", "created"]
-    ordering = ["title"]
-    search_fields = ["title"]
+    filterset_fields = ["board", "user"]  # Поля, по которым производится фильтрация категорий (доска и автор)
+    ordering_fields = ["title", "created"]  # Поля, по которым производится сортировка категорий (название и дата создания)
+    ordering = ["title"]  # Сортировка категорий (по названию)
+    search_fields = ["title"]  # Поле, по которому производится поиск категорий (по названию)
 
     def get_queryset(self):
         """Переопределенное значение при использовании фильтров для поиска значений"""
@@ -45,6 +45,9 @@ class GoalCategoryListView(generics.ListAPIView):
 
 
 class GoalCategoryView(generics.RetrieveUpdateDestroyAPIView):
+    """Класс отображения/изменения/удаления списка категорий для целей, с использованием модели категорий (model),
+        выданных разрешений (permission_classes), сериализатора (serializer_class), пагинатора (pagination_class) и
+        фильтров (filter_backends)"""
     model = GoalCategory
     serializer_class = GoalCategorySerializer
     permission_classes = [permissions.IsAuthenticated, CategoryPermissions]
@@ -54,6 +57,7 @@ class GoalCategoryView(generics.RetrieveUpdateDestroyAPIView):
         return GoalCategory.objects.filter(board__participants__user=self.request.user, is_deleted=False)
 
     def perform_destroy(self, instance):
+        """Удаление экземпляра объекта - Категории"""
         with transaction.atomic():
             instance.is_deleted = True
             instance.save()
@@ -62,12 +66,17 @@ class GoalCategoryView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class GoalCreateView(generics.CreateAPIView):
+    """Класс создания целей, с использованием модели целей (model),
+        выданных разрешений (permission_classes) и сериализатора (serializer_class)"""
     model = Goal
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCreateSerializer
 
 
 class GoalListView(generics.ListAPIView):
+    """Класс отображения списка категорий для целей, с использованием модели категорий (model),
+        выданных разрешений (permission_classes), сериализатора (serializer_class), пагинатора (pagination_class) и
+        фильтров (filter_backends)"""
     model = Goal
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalSerializer
@@ -78,11 +87,12 @@ class GoalListView(generics.ListAPIView):
         filters.SearchFilter,
     ]
     filterset_class = GoalDateFilter
-    ordering_fields = ["due_date", "priority"]
-    ordering = ["priority", "due_date"]
-    search_fields = ["title", "description"]
+    ordering_fields = ["due_date", "priority"]  # Поля, по которым производится сортировка (дата дедлайна и приоритет)
+    ordering = ["priority", "due_date"]  # Сортировка целей (по дате дедлайна и приоритету)
+    search_fields = ["title", "description"]  # Поля, по которым производится поиск целей (по названию и описанию)
 
     def get_queryset(self):
+        """Переопределенное значение при использовании фильтров для поиска значений"""
         return Goal.objects.filter(category__board__participants__user=self.request.user)
 
 
@@ -92,9 +102,11 @@ class GoalView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, GoalPermissions]
 
     def get_queryset(self):
+        """Переопределенное значение при использовании фильтров для поиска значений"""
         return Goal.objects.filter(category__board__participants__user=self.request.user)
 
     def perform_destroy(self, instance):
+        """Удаление экземпляра объекта. В данном случае - его архивация"""
         instance.status = Goal.Status.archived
         instance.save()
         return instance
@@ -115,6 +127,7 @@ class GoalCommentView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GoalCommentSerializer
 
     def get_queryset(self):
+        """Переопределенное значение при использовании фильтров для поиска значений"""
         return GoalComment.objects.filter(goal__category__board__participants__user=self.request.user)
 
 
@@ -124,10 +137,11 @@ class GoalCommentListView(generics.ListAPIView):
     serializer_class = GoalCommentSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    ordering_fields = ["goal"]
-    ordering = ["-created"]
+    ordering_fields = ["goal"]  # Поля, по которым производится сортировка
+    ordering = ["-created"]  # Сортировка по дате создания комментария (самые поздние комментарии - вверху)
 
     def get_queryset(self):
+        """Переопределенное значение при использовании фильтров для поиска значений"""
         return GoalComment.objects.filter(goal__category__board__participants__user=self.request.user)
 
 
@@ -144,9 +158,10 @@ class BoardListView(ListAPIView):
     pagination_class = LimitOffsetPagination
     serializer_class = BoardListSerializer
     filter_backends = [filters.OrderingFilter]
-    ordering = ["title"]
+    ordering = ["title"]  # Сортировка по названию доски
 
     def get_queryset(self):
+        """Переопределенное значение при использовании фильтров для поиска значений"""
         return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
 
 
@@ -156,9 +171,11 @@ class BoardView(RetrieveUpdateDestroyAPIView):
     serializer_class = BoardSerializer
 
     def get_queryset(self):
+        """Переопределенное значение при использовании фильтров для поиска значений"""
         return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
 
     def perform_destroy(self, instance: Board):
+        """Удаление экземпляра объекта. В данном случае - его архивация"""
         with transaction.atomic():
             instance.is_deleted = True
             instance.save()

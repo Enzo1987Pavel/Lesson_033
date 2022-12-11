@@ -16,7 +16,7 @@ class RegistrationView(generics.CreateAPIView):
 
 class LoginView(generics.GenericAPIView):
     """Класс для входа пользователя, использующий сериализатор из 'serializer_class',
-    проверяющий валидность введенных данных"""
+        проверяющий валидность введенных данных"""
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
@@ -32,20 +32,24 @@ class LoginView(generics.GenericAPIView):
 
 class ProfileView(generics.RetrieveUpdateDestroyAPIView):
     """Класс для просмотра профиля пользователя, использующий сериализатор из 'serializer_class',
-    модель 'USER_MODEL' и разрешения (permission_classes)"""
+        модель 'USER_MODEL' и выданные разрешения (permission_classes)"""
     serializer_class = ProfileSerializer
     queryset = USER_MODEL.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
+        """Получение сведений о профиле пользователя"""
         return self.request.user
 
     def delete(self, request, *args, **kwargs):
+        """Выход из профиля пользователя"""
         logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UpdatePasswordView(generics.UpdateAPIView):
+    """Класс для изменения текущего пароля на новый,
+        использующий сериализатор из 'serializer_class' и выданные разрешения (permission_classes)"""
     serializer_class = UpdatePasswordSerializer
     permission_classes = [permissions.IsAuthenticated]
 

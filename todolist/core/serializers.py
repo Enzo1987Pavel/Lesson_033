@@ -46,7 +46,7 @@ class LoginSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         """Функция создания пользователя по имени 'username' и паролю 'password',
-        если введенные данные были верны (имя и пароль)"""
+            если введенные данные были верны (имя и пароль)"""
         user = authenticate(
             username=validated_data["username"],
             password=validated_data["password"],
@@ -75,7 +75,7 @@ class UpdatePasswordSerializer(serializers.Serializer):
 
     def validate(self, data):
         """Функция проверки корректности введенного текущего пароля.
-        Если пароль введен неверно - ошибка, в противном случае - применяется новый введеный пароль"""
+            Если пароль введен неверно - ошибка, в противном случае - применяется новый введеный пароль"""
         user = data["user"]
         if not user.check_password(data["old_password"]):
             raise serializers.ValidationError({"old_password": "Введен неверный пароль!"})
