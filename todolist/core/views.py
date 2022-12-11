@@ -9,14 +9,18 @@ USER_MODEL = get_user_model()
 
 
 class RegistrationView(generics.CreateAPIView):
+    """Класс для регистрации пользователя, использующий сериализатор из 'serializer_class'"""
     model = USER_MODEL
     serializer_class = RegistrationSerializer
 
 
 class LoginView(generics.GenericAPIView):
+    """Класс для входа пользователя, использующий сериализатор из 'serializer_class',
+    проверяющий валидность введенных данных"""
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
+        """Использование сериализатора для проверки входных данных"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -27,6 +31,8 @@ class LoginView(generics.GenericAPIView):
 
 
 class ProfileView(generics.RetrieveUpdateDestroyAPIView):
+    """Класс для просмотра профиля пользователя, использующий сериализатор из 'serializer_class',
+    модель 'USER_MODEL' и разрешения (permission_classes)"""
     serializer_class = ProfileSerializer
     queryset = USER_MODEL.objects.all()
     permission_classes = [permissions.IsAuthenticated]

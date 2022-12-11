@@ -45,7 +45,8 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, write_only=True)
 
     def create(self, validated_data):
-        """Функция создания пользователя по имени 'username' и паролю 'password'"""
+        """Функция создания пользователя по имени 'username' и паролю 'password',
+        если введенные данные были верны (имя и пароль)"""
         user = authenticate(
             username=validated_data["username"],
             password=validated_data["password"],
@@ -67,11 +68,14 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class UpdatePasswordSerializer(serializers.Serializer):
+    """Класс для изменения текущего пароля на новый"""
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     old_password = serializers.CharField(required=True, write_only=True)
     new_password = serializers.CharField(required=True, write_only=True)
 
     def validate(self, data):
+        """Функция проверки корректности введенного текущего пароля.
+        Если пароль введен неверно - ошибка, в противном случае - применяется новый введеный пароль"""
         user = data["user"]
         if not user.check_password(data["old_password"]):
             raise serializers.ValidationError({"old_password": "Введен неверный пароль!"})
@@ -84,6 +88,7 @@ class UpdatePasswordSerializer(serializers.Serializer):
         return data
 
     def update(self, instance, validated_data):
+        """Функция обновления и хэширования нового пароля"""
         instance.password = make_password(validated_data["new_password"])
         instance.save()
         return instance
