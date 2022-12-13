@@ -1,6 +1,10 @@
+import psycopg2
 import pytest
 import requests
 from pytest_postgresql.executor import PostgreSQLExecutor
+
+
+from core.serializers import RegistrationSerializer
 
 
 def test_get_main_page():
@@ -33,3 +37,25 @@ def test_versions(ctl_input: str, version: str) -> None:
     assert match.groupdict()["version"] == version
 
 
+def test_bad_password():
+    if RegistrationSerializer.validate:
+        assert "Пароли совпадают!"
+
+
+def test_new():
+    try:
+        conn = psycopg2.connect("dbname='postgres' user='postgres' password='postgres'")
+    except:
+        print("Don't connect to DB!")
+
+    cur = conn.cursor()
+
+    try:
+        userrss = []
+        cur.execute("SELECT username FROM core_user")
+        for row in cur:
+            userrss.append(row)
+
+    except:
+        print("No data!")
+    print(str(userrss))
