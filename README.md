@@ -26,3 +26,13 @@ pip freeze > requirements.txt
 ```sh
 pip install -r requirements.txt
 ```
+#### Запуск тестов из терминала PyCharm в следующем порядке^ из корневого католога ввести следующие команды:
+1. для перехода в папку 'todolist'
+```sh
+cd .\todolist\
+```
+2. запуск непосредственно тестов
+```sh
+pytest
+```
+Или в окне '**Run/Debug Configurations**' выбрать настройку '**Pytest**' и запустить.

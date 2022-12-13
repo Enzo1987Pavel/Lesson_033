@@ -1,4 +1,3 @@
-
 import pytest
 import requests
 from pytest_postgresql.executor import PostgreSQLExecutor
@@ -32,3 +31,5 @@ def test_versions(ctl_input: str, version: str) -> None:
     match = PostgreSQLExecutor.VERSION_RE.search(ctl_input)
     assert match is not None
     assert match.groupdict()["version"] == version
+
+
