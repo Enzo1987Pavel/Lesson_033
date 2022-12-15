@@ -1,6 +1,7 @@
 import requests
 
 from bot.tg.dc import GetUpdatesResponse, SendMessageResponse
+from todolist import settings
 
 
 class TgClient:
@@ -17,5 +18,12 @@ class TgClient:
 
     def send_message(self, chat_id: int, text: str) -> SendMessageResponse:
         url = self.get_url("sendMessage")
-        resp = requests.post(url, json={"chat_id": chat_id, "text": text})
+        resp = requests.get(url, params={"chat_id": chat_id, "text": text})
         return SendMessageResponse.Schema().load(resp.json())
+
+
+# cl = TgClient(settings.BOT_TOKEN)
+# print(cl.get_updates(offset=0, timeout=60))
+#
+# cl = TgClient(settings.BOT_TOKEN)
+# print(cl.send_message(1044177532, "Привет"))

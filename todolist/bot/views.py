@@ -1,4 +1,4 @@
-from django.conf import settings
+from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -7,8 +7,10 @@ from bot.models import TgUser
 from bot.serializers import TgUserSerializer
 from bot.tg.client import TgClient
 from goals.models import BoardParticipant, Board
+from todolist import settings
 
 
+# Create your views here.
 class VerificationView(GenericAPIView):
     model = TgUser
     permission_classes = [IsAuthenticated]

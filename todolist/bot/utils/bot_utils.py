@@ -1,7 +1,7 @@
 from bot.models import TgUser
 from bot.tg.client import TgClient
 from bot.tg.dc import Message
-from goals.models import Goal, GoalCategory, Board
+from goals.models import Goal, Category, Board, BoardParticipant
 
 
 class BotGoal:
@@ -30,12 +30,12 @@ class BotGoal:
         self.tg_client.send_message(
             chat_id=self.msg.chat.id, text=f'Подтвердите, пожалуйста, свой аккаунт. '
                                            f'Для подтверждения необходимо ввести код: '
-                                           f'{self.tg_user.verification_code} на сайте: pesaulov87.ga'
+                                           f'{self.tg_user.verification_code} на сайте: skotenkov.tk'
         )
 
     def create_goal(self):
         line_break = '\n'
-        categories = GoalCategory.objects.filter(user=self.tg_user.user)
+        categories = Category.objects.filter(user=self.tg_user.user)
         if '/create' == self.msg.text and categories.count() > 0:
             self.tg_client.send_message(
                 chat_id=self.msg.chat.id,
@@ -52,7 +52,7 @@ class BotGoal:
         elif 'create_cat' in self.msg.text:
             text = self.msg.text.replace('create_cat', 'tg')
             board = Board.objects.filter(title='Telegram board').first()
-            category = GoalCategory(
+            category = Category(
                 title=text,
                 user=self.tg_user.user,
                 board_id=board.id
@@ -66,7 +66,7 @@ class BotGoal:
 
         elif 'create_goal' in self.msg.text:
             text = self.msg.text.replace('create_goal', 'tg')
-            category = GoalCategory.objects.filter(
+            category = Category.objects.filter(
                 title__contains='tg',
                 user_id=self.tg_user.user.id
             ).first()
