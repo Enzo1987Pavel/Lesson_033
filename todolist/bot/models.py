@@ -2,9 +2,8 @@ import random
 import string
 
 from django.db import models
-from core.models import User
 
-VERIFICATION_CODE_VOCABULARY = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+from core.models import User
 
 
 class TgUser(models.Model):
@@ -17,10 +16,6 @@ class TgUser(models.Model):
     username = models.CharField(max_length=150, verbose_name="tg_username", null=True, blank=True, default=None)
     user = models.ForeignKey(User, models.PROTECT, null=True, blank=True, default=None, verbose_name="Пользователь")
     verification_code = models.CharField(max_length=12, unique=True, verbose_name="Код подтверждения")
-    #
-    # def set_verification_code(self):
-    #     code = "".join([random.choice(VERIFICATION_CODE_VOCABULARY) for _ in range(12)])
-    #     self.verification_code = code
 
     def set_verification_code(self) -> None:
         length = 12
