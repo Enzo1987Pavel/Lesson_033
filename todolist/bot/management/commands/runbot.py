@@ -1,4 +1,4 @@
-
+from django.conf import settings
 from django.core.management import BaseCommand
 
 from bot.models import TgUser
@@ -6,7 +6,6 @@ from bot.tg.client import TgClient
 from bot.tg.dc import Message
 from bot.utils.bot_utils import BotGoal
 from goals.models import Goal, Board, BoardParticipant
-from todolist.todolist import settings
 
 
 class Command(BaseCommand):
