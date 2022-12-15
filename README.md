@@ -5,7 +5,7 @@
 * ![version](https://img.shields.io/badge/Python-v_3.10-informational/?style=social&logo=Python)
 * ![version](https://img.shields.io/badge/Django-v_4.0.1-informational/?style=social&logo=Django)
 * ![version](https://img.shields.io/badge/PostgreSQL-v_14.6_alpine-informational/?style=social&logo=Postgresql)
-* ![version](https://img.shields.io/badge/Docker_Desktop-v_4.14.1-informational/?style=social&logo=Docker)
+* ![version](https://img.shields.io/badge/Docker_Desktop-v_4.15.0-informational/?style=social&logo=Docker)
 ##
 #### Файл `"docker-compose.yaml"` содержит контейнер с базой данных Postgres, который разворачивается при вызове в терминале команды `docker-compose up -d`.
 #### Файл `"docker-compose-ci.yaml"` для разворачивания приложения на сервере.
