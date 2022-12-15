@@ -1,4 +1,5 @@
 import random
+import string
 
 from django.db import models
 from core.models import User
@@ -23,5 +24,6 @@ class TgUser(models.Model):
 
     def set_verification_code(self) -> None:
         length = 12
-        v_code = "".join([random.choice(VERIFICATION_CODE_VOCABULARY) for _ in range(length)])
+        digits = string.digits
+        v_code = "".join(random.sample(digits, length))
         self.verification_code = v_code
