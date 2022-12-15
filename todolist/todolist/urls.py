@@ -22,4 +22,5 @@ urlpatterns = [
     path("goals/", include("goals.urls"), name="goals"),
     path("oauth/", include("social_django.urls", namespace="social")),
     path("api-auth/", include("rest_framework.urls")),
+    path('bot/', include('bot.urls'), name="bot"),
 ]

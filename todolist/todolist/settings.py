@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 
     "core",
     "goals",
-    # "bot",
+    "bot",
 
     "rest_framework",
     "corsheaders",
@@ -174,4 +174,4 @@ REST_FRAMEWORK = {
 }
 
 
-# TG_TOKEN = env.str("BOT_TOKEN")
+BOT_TOKEN = env.str("BOT_TOKEN")
