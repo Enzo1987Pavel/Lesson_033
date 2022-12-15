@@ -20,7 +20,7 @@ class VerificationView(GenericAPIView):
 
         tg_user: TgUser = serializer.validated_data["TG_user"]
         tg_user.user = self.request.user
-        tg_user.save(update_fields=['user'])
+        tg_user.save(update_fields=["user"])
         instance_serializer: TgUserSerializer = self.get_serializer(tg_user)
         board = Board(title="Telegram board")
         board.save()
