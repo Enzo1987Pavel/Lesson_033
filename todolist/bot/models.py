@@ -6,15 +6,18 @@ from django.db import models
 from core.models import User
 
 
-# Create your models here.
 class TgUser(models.Model):
-    tg_chat_id = models.BigIntegerField(verbose_name='TG CHAT_ID')
-    tg_user_id = models.BigIntegerField(unique=True, verbose_name='TG USER_ID')
+    class Meta:
+        verbose_name = 'Telegram Пользователь'
+        verbose_name_plural = 'Telegram Пользователи'
+
+    tg_chat_id = models.BigIntegerField(verbose_name='tg_chat_id')
+    tg_user_id = models.BigIntegerField(unique=True, verbose_name='tg_user_id')
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.PROTECT, default=None)
     verification_code = models.CharField(max_length=10, unique=True)
     username = models.CharField(
-        max_length=255,
-        verbose_name='TG USERNAME',
+        max_length=150,
+        verbose_name='Telegram_username',
         null=True,
         blank=True,
         default=None
@@ -26,6 +29,4 @@ class TgUser(models.Model):
         v_code = ''.join(random.sample(digits, length))
         self.verification_code = v_code
 
-    class Meta:
-        verbose_name = 'TG User'
-        verbose_name_plural = 'TG Users'
+

@@ -1,7 +1,7 @@
 from bot.models import TgUser
 from bot.tg.client import TgClient
 from bot.tg.dc import Message
-from goals.models import Goal, Category, Board, BoardParticipant
+from goals.models import Goal, GoalCategory, Board, BoardParticipant
 
 
 class BotGoal:
@@ -35,7 +35,7 @@ class BotGoal:
 
     def create_goal(self):
         line_break = '\n'
-        categories = Category.objects.filter(user=self.tg_user.user)
+        categories = GoalCategory.objects.filter(user=self.tg_user.user)
         if '/create' == self.msg.text and categories.count() > 0:
             self.tg_client.send_message(
                 chat_id=self.msg.chat.id,
@@ -52,7 +52,7 @@ class BotGoal:
         elif 'create_cat' in self.msg.text:
             text = self.msg.text.replace('create_cat', 'tg')
             board = Board.objects.filter(title='Telegram board').first()
-            category = Category(
+            category = GoalCategory(
                 title=text,
                 user=self.tg_user.user,
                 board_id=board.id
@@ -66,7 +66,7 @@ class BotGoal:
 
         elif 'create_goal' in self.msg.text:
             text = self.msg.text.replace('create_goal', 'tg')
-            category = Category.objects.filter(
+            category = GoalCategory.objects.filter(
                 title__contains='tg',
                 user_id=self.tg_user.user.id
             ).first()
