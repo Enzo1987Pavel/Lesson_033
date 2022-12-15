@@ -24,6 +24,19 @@ services:
     ports:
       - "8000:8000"
 
+  bot:
+    build:
+      context: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    env_file:
+      - .env
+    command: >
+      bash -c 'python3 manage.py runbot'
+
   migrations:
     build:
       context: .

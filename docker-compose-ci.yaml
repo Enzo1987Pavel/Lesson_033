@@ -28,6 +28,22 @@ services:
       migrations:
         condition: service_completed_successfully
 
+  bot:
+    image: enzo1987/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    environment:
+      DEBUG: ${DEBUG}
+      SECRET_KEY: ${SECRET_KEY}
+      SOCIAL_AUTH_VK_OAUTH2_KEY: ${SOCIAL_AUTH_VK_OAUTH2_KEY}
+      SOCIAL_AUTH_VK_OAUTH2_SECRET: ${SOCIAL_AUTH_VK_OAUTH2_SECRET}
+      BOT_TOKEN: ${BOT_TOKEN}
+    command: >
+      bash -c 'python3 manage.py runbot'
+
   migrations:
     image: enzo1987/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     environment:
