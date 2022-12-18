@@ -15,13 +15,13 @@ class VerificationView(GenericAPIView):
 
     def patch(self, request, *args, **kwargs):
         s: TgUserSerializer = self.get_serializer(data=request.data)
-        s.is_valid(raise_exception=True)
+        s. is_valid(raise_exception=True)
 
         tg_user: TgUser = s.validated_data["tg_user"]
         tg_user.user = self.request.user
         tg_user.save(update_fields=["user"])
         instance_s: TgUserSerializer = self.get_serializer(tg_user)
         tg_client = TgClient(settings.BOT_TOKEN)
-        tg_client.send_message(tg_user.tg_chat_id, "Личность подтверждена!")
+        tg_client.send_message(tg_user.tg_chat_id, "Личность пользователя подтверждена!")
 
         return Response(instance_s.data)
