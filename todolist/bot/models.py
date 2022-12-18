@@ -13,16 +13,16 @@ class TgUser(models.Model):
         verbose_name = "Telegram Пользователь"
         verbose_name_plural = "Telegram Пользователи"
 
-    chat_id = models.BigIntegerField(verbose_name="id чата TG")
-    user_ud = models.BigIntegerField(verbose_name="id пользователя TG")
-    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.PROTECT, null=True, blank=True)
+    tg_chat_id = models.BigIntegerField(verbose_name="tg_chat_id")
+    tg_user_id = models.BigIntegerField(unique=True, verbose_name="tg_user_id")
+    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.PROTECT, null=True, blank=True, default=None)
     verification_code = models.CharField(max_length=255, null=True, blank=True, verbose_name="Код верификации")
 
 
     # tg_chat_id = models.BigIntegerField(verbose_name="tg_chat_id")
     # tg_user_id = models.BigIntegerField(unique=True, verbose_name="tg_user_id")
-    # user = models.ForeignKey(User, null=True, blank=True, on_delete=models.PROTECT, default=None)
-    # verification_code = models.CharField(max_length=12, unique=True, verbose_name="код подтверждения")
+    # user = models.ForeignKey(User, , verbose_name="Пользователь" null=True, blank=True, on_delete=models.PROTECT, default=None)
+    # verification_code = models.CharField(max_length=12, unique=True, verbose_name="Код подтверждения")
     # username = models.CharField(max_length=150, verbose_name="Telegram_username", null=True, blank=True, default=None)
 
     # def set_verification_code(self) -> None:
