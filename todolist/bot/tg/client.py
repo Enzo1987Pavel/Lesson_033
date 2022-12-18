@@ -1,21 +1,23 @@
 import requests
-
-from bot.tg.dc import GetUpdatesResponse, SendMessageResponse
+from bot.tg.dc import GetUpdatesResponse, SendMessageResponse, get_updates_schema, send_message_schema
 
 
 class TgClient:
     def __init__(self, token):
         self.token = token
 
-    def get_url(self, method: str):
+    def get_url(self, method: str) -> str:
         return f"https://api.telegram.org/bot{self.token}/{method}"
 
     def get_updates(self, offset: int = 0, timeout: int = 60) -> GetUpdatesResponse:
-        url = self.get_url("getUpdates")
-        resp = requests.get(url, params={"offset": offset, "timeout": timeout})
-        return GetUpdatesResponse.Schema().load(resp.json())
+        response = requests.get(self.get_url(f"getUpdates?offset={offset}&timeout={timeout}"))
+        json_data = response.json()
+        print(json_data)
+        result = get_updates_schema().load(json_data)
+        return result
 
     def send_message(self, chat_id: int, text: str) -> SendMessageResponse:
-        url = self.get_url("sendMessage")
-        resp = requests.post(url, json={"chat_id": chat_id, "text": text})
-        return SendMessageResponse.Schema().load(resp.json())
+        response = requests.get(self.get_url(f"sendMessage?chat_id={chat_id}&text={text}"))
+        json_data = response.json()
+        result = send_message_schema().load(json_data)
+        return result

@@ -1,27 +1,23 @@
-from django.conf import settings
-from rest_framework import permissions
-from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
+from rest_framework import generics
+from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
 
 from bot.models import TgUser
-from bot.serializers import TgUserSerializer
-from bot.tg.client import TgClient
+from bot.serializers import TgUserVerCodSerializer
 
 
-class VerificationView(GenericAPIView):
+class TgUserUpdate(generics.UpdateAPIView):
     model = TgUser
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = TgUserSerializer
+    serializer_class = TgUserVerCodSerializer
+    permission_classes = (IsAuthenticated,)
 
-    def patch(self, request, *args, **kwargs):
-        s: TgUserSerializer = self.get_serializer(data=request.data)
-        s. is_valid(raise_exception=True)
+    def get_object(self):
+        try:
+            user = self.model.objects.get(verification_code=self.request.data.get('verification_code'))
+        except self.model.DoesNotExist:
+            raise ValidationError({"verification_code": "Неправильный верификационный код"})
 
-        tg_user: TgUser = s.validated_data["tg_user"]
-        tg_user.user = self.request.user
-        tg_user.save(update_fields=["user"])
-        instance_s: TgUserSerializer = self.get_serializer(tg_user)
-        tg_client = TgClient(settings.BOT_TOKEN)
-        tg_client.send_message(tg_user.tg_chat_id, "Личность пользователя подтверждена!")
+        return user
 
-        return Response(instance_s.data)
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)

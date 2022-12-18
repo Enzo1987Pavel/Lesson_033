@@ -5,7 +5,7 @@ from django.db import models
 
 from core.models import User
 
-CODE_FOR_VERIVICATION = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+# CODE_FOR_VERIVICATION = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 
 class TgUser(models.Model):
@@ -13,11 +13,17 @@ class TgUser(models.Model):
         verbose_name = "Telegram Пользователь"
         verbose_name_plural = "Telegram Пользователи"
 
-    tg_chat_id = models.BigIntegerField(verbose_name="tg_chat_id")
-    tg_user_id = models.BigIntegerField(unique=True, verbose_name="tg_user_id")
-    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.PROTECT, default=None)
-    verification_code = models.CharField(max_length=12, unique=True, verbose_name="код подтверждения")
-    username = models.CharField(max_length=150, verbose_name="Telegram_username", null=True, blank=True, default=None)
+    chat_id = models.BigIntegerField(verbose_name="id чата TG")
+    user_ud = models.BigIntegerField(verbose_name="id пользователя TG")
+    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.PROTECT, null=True, blank=True)
+    verification_code = models.CharField(max_length=255, null=True, blank=True, verbose_name="Код верификации")
+
+
+    # tg_chat_id = models.BigIntegerField(verbose_name="tg_chat_id")
+    # tg_user_id = models.BigIntegerField(unique=True, verbose_name="tg_user_id")
+    # user = models.ForeignKey(User, null=True, blank=True, on_delete=models.PROTECT, default=None)
+    # verification_code = models.CharField(max_length=12, unique=True, verbose_name="код подтверждения")
+    # username = models.CharField(max_length=150, verbose_name="Telegram_username", null=True, blank=True, default=None)
 
     # def set_verification_code(self) -> None:
     #     length = 12
@@ -25,6 +31,6 @@ class TgUser(models.Model):
     #     v_code = ''.join(random.sample(digits, length))
     #     self.verification_code = v_code
 
-    def set_verification_code(self):
-        code = "".join([random.choice(CODE_FOR_VERIVICATION) for _ in range(12)])
-        self.verification_code = code
+    # def set_verification_code(self):
+    #     code = "".join([random.choice(CODE_FOR_VERIVICATION) for _ in range(12)])
+    #     self.verification_code = code
