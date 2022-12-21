@@ -24,5 +24,4 @@ class BotVerificationView(generics.UpdateAPIView):
 
         tg_user.user = request.user
         tg_user.save()
-        tg_client.send_message(chat_id=tg_user.tg_chat_id, text="Регистрация прошла успешно!")
         return Response(data=data, status=status.HTTP_201_CREATED)
