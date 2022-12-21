@@ -1,36 +1,20 @@
-import random
-import string
-
 from django.db import models
-
-from core.models import User
-
-# CODE_FOR_VERIVICATION = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+from django.core.validators import MinLengthValidator
+from django.utils.crypto import get_random_string
 
 
 class TgUser(models.Model):
-    class Meta:
-        verbose_name = "Telegram Пользователь"
-        verbose_name_plural = "Telegram Пользователи"
+    tg_chat_id = models.BigIntegerField(verbose_name = "Telegram chat_id")
+    tg_user_id = models.BigIntegerField(unique=True, verbose_name="Telegram user_id")
+    tg_username = models.CharField(max_length=32, validators=[MinLengthValidator(5)], verbose_name="Пользователь Telegram")
+    user = models.ForeignKey("core.User", null=True, blank=True, on_delete=models.CASCADE, verbose_name="Имя пользователя")
+    verification_code = models.CharField(max_length=15, unique=True, verbose_name="Код верификации")
 
-    tg_chat_id = models.BigIntegerField(verbose_name="tg_chat_id")
-    tg_user_id = models.BigIntegerField(unique=True, verbose_name="tg_user_id")
-    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.PROTECT, null=True, blank=True, default=None)
-    verification_code = models.CharField(max_length=255, null=True, blank=True, verbose_name="Код верификации")
+    def generate_verification_code(self) -> str:
+        # chars = "sdfsdfsdf"  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # return get_random_string(15, chars)
 
-
-    # tg_chat_id = models.BigIntegerField(verbose_name="tg_chat_id")
-    # tg_user_id = models.BigIntegerField(unique=True, verbose_name="tg_user_id")
-    # user = models.ForeignKey(User, , verbose_name="Пользователь" null=True, blank=True, on_delete=models.PROTECT, default=None)
-    # verification_code = models.CharField(max_length=12, unique=True, verbose_name="Код подтверждения")
-    # username = models.CharField(max_length=150, verbose_name="Telegram_username", null=True, blank=True, default=None)
-
-    # def set_verification_code(self) -> None:
-    #     length = 12
-    #     digits = string.digits
-    #     v_code = ''.join(random.sample(digits, length))
-    #     self.verification_code = v_code
-
-    # def set_verification_code(self):
-    #     code = "".join([random.choice(CODE_FOR_VERIVICATION) for _ in range(12)])
-    #     self.verification_code = code
+        code = get_random_string(15)
+        self.verification_code = code
+        self.save()
+        return code
