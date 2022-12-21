@@ -1,11 +1,9 @@
-from django.conf import settings
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import TgUser
 from .serializers import TgUserSerializer
-from .tg.client import TgClient
 
 
 class BotVerificationView(generics.UpdateAPIView):
@@ -16,7 +14,6 @@ class BotVerificationView(generics.UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         data = self.serializer_class(request.data).data
-        tg_client = TgClient(settings.BOT_TOKEN)
         tg_user = TgUser.objects.filter(verification_code=data["verification_code"]).first()
 
         if not tg_user:

@@ -12,13 +12,6 @@ class TgUser(models.Model):
     tg_user_id = models.BigIntegerField(unique=True, verbose_name="id пользователя")
     user = models.ForeignKey("core.User", null=True, blank=True, on_delete=models.CASCADE, verbose_name="Пользователь приложения")
     verification_code = models.CharField(max_length=15, unique=True, verbose_name="Код верификации")
-    tg_username = models.CharField(
-        max_length=32,
-        validators=[MinLengthValidator(5)],
-        null=True,
-        blank=True,
-        default=None,
-        verbose_name="Имя пользователя")
 
     def generate_verification_code(self) -> str:
         code = get_random_string(15)
