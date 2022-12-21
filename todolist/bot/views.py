@@ -29,7 +29,8 @@ class BotVerificationView(generics.UpdateAPIView):
         tg_user = TgUser.objects.filter(verification_code=data["verification_code"]).first()
 
         if not tg_user:
-            raise ValidationError("Введен неверный код верификации!")
+            # raise ValidationError("Введен неверный код верификации!")
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         tg_user = request.user
         tg_user.save()
