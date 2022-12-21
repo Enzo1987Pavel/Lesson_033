@@ -31,10 +31,6 @@ class Command(BaseCommand):
                      f"{tg_user.verification_code}\n"
                      f"на сайте pesaulov87.ga"
             )
-            # if not tg_user:
-            #     self.tg_client.send_message(chat_id=msg.chat_id, text="Привет новый пользователь!")
-            # else:
-            #     self.tg_client.send_message(chat_id=msg.chat_id, text="Данный пользователь уже был зарегистрирован!")
 
     def handle(self, *args, **options):
         offset = 0
@@ -43,5 +39,4 @@ class Command(BaseCommand):
 
             for item in res.result:
                 offset = item.update_id + 1
-                # print(item.message)
                 self.handle_user(item.message)
