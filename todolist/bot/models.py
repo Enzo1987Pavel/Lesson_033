@@ -10,7 +10,7 @@ class TgUser(models.Model):
 
     tg_chat_id = models.BigIntegerField(verbose_name="id чата")
     tg_user_id = models.BigIntegerField(unique=True, verbose_name="id пользователя")
-    # tg_username = models.CharField(max_length=32, validators=[MinLengthValidator(5)], verbose_name="Имя пользователя")
+    tg_username = models.CharField(max_length=32, validators=[MinLengthValidator(5)], verbose_name="Имя пользователя")
     user = models.ForeignKey("core.User", null=True, blank=True, on_delete=models.CASCADE, verbose_name="Пользователь приложения")
     verification_code = models.CharField(max_length=15, unique=True, verbose_name="Код верификации")
 
