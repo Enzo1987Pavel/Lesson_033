@@ -26,11 +26,11 @@ class Command(BaseCommand):
                      f"{tg_user.verification_code}\n\n"
                      f"на сайте pesaulov87.ga"
             )
-        # else:
-        #     self.tg_client.send_message(
-        #         chat_id=msg.chat.id,
-        #         text="Вы уже зарегистророваны!"
-        #     )
+        else:
+            self.tg_client.send_message(
+                chat_id=msg.chat.id,
+                text="Вы уже зарегистророваны!"
+            )
 
     def verified_user(self, tg_user, msg: Message):
         if msg.text == '/goals':
@@ -38,7 +38,7 @@ class Command(BaseCommand):
         elif msg.text == '/start':
             self.tg_client.send_message(
                 chat_id=msg.chat.id,
-                text=f'Вы уже подтвердили свою личность!'
+                text=f'Вы уже зарегистророваны!'
             )
         elif 'create' in msg.text:
             BotGoal(tg_user=tg_user, msg=msg, tg_client=self.tg_client).create_goal()
@@ -57,7 +57,6 @@ class Command(BaseCommand):
         tg_user, create = TgUser.objects.get_or_create(
             tg_user_id=msg.msg_from.id,
             tg_chat_id=msg.chat.id,
-            # username=msg.msg_from.username
         )
         if create:
             self.tg_client.send_message(chat_id=msg.chat.id, text='Зарегистрировал вас!')

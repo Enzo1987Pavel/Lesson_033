@@ -19,6 +19,6 @@ class BotVerificationView(generics.UpdateAPIView):
         if not tg_user:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        tg_user.user = request.user
+        tg_user = request.user
         tg_user.save()
         return Response(data=data, status=status.HTTP_201_CREATED)
