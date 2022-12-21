@@ -15,13 +15,13 @@ class BotVerificationView(generics.UpdateAPIView):
     serializer_class = TgUserSerializer
     http_method_names = ["patch"]
 
-    def get_object(self):
-        try:
-            obj = self.model.objects.get(verification_code=self.request.data.get("verification_code"))
-        except self.model.DoesNotExist:
-            raise ValidationError("Введен неверный код верификации!")
-
-        return obj
+    # def get_object(self):
+    #     try:
+    #         obj = self.model.objects.get(verification_code=self.request.data.get("verification_code"))
+    #     except self.model.DoesNotExist:
+    #         raise ValidationError("Введен неверный код верификации!")
+    #
+    #     return obj
 
     def patch(self, request, *args, **kwargs):
         data = self.serializer_class(request.data).data
@@ -29,7 +29,7 @@ class BotVerificationView(generics.UpdateAPIView):
         tg_user = TgUser.objects.filter(verification_code=data["verification_code"]).first()
 
         if not tg_user:
-            raise ValidationError({"verification_code": "Неправильный верификационный код"})
+            raise ValidationError("Введен неверный код верификации!")
 
         tg_user = request.user
         tg_user.save()
