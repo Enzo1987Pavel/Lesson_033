@@ -15,8 +15,6 @@ class TgUser(models.Model):
     verification_code = models.CharField(max_length=15, unique=True)
 
     def generate_verification_code(self) -> str:
-        # chars = "sdfsdfsdf"  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        # return get_random_string(15, chars)
 
         code = get_random_string(15)
         self.verification_code = code

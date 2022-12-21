@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from typing import List
-from dataclasses import field
+from dataclasses import dataclass, field
 
 import marshmallow_dataclass
-from marshmallow_dataclass import dataclass
+# from marshmallow_dataclass import dataclass
 from marshmallow import EXCLUDE
 
 
