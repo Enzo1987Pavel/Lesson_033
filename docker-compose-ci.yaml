@@ -31,11 +31,12 @@ services:
 
   bot:
     image: enzo1987/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    restart: always
     depends_on:
-      db:
-        condition: service_healthy
       migrations:
         condition: service_completed_successfully
+      db:
+        condition: service_healthy
     environment:
       DEBUG: ${DEBUG}
       SECRET_KEY: ${SECRET_KEY}
