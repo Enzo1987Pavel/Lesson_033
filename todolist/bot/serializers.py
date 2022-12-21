@@ -8,3 +8,4 @@ class TgUserSerializer(serializers.ModelSerializer):
         model = TgUser
         read_only_fields = ("tg_id", "tg_user_id")
         fields = ("verification_code",)
+
