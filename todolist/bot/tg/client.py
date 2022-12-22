@@ -1,4 +1,3 @@
-import marshmallow_dataclass
 import requests
 
 from bot.tg import dc
@@ -20,7 +19,7 @@ class TgClient:
         """
         url = self.get_url("getUpdates")
         response = requests.get(url, params={"offset": offset, "timeout": timeout})
-        return dc.GET_UPDATES_SCHEMA.load(response.json())
+        return dc.GET_UPDATES_RESPONSE_SCHEMA.load(response.json())
 
     def send_message(self, chat_id: int, text: str) -> dc.SendMessageResponse:
         """

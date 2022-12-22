@@ -23,8 +23,8 @@ class BotVerificationView(generics.UpdateAPIView):
         if not tg_user:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        tg_user.user = request.user
+        tg_user = request.user
         tg_user.save()
-        tg_client.send_message(chat_id=tg_user.chat.id, text=f"Для подтверждения аккаунта!")
+        # tg_client.send_message(chat_id=tg_user.chat.id, text=f"Для подтверждения аккаунта!")
         return Response(data=data, status=status.HTTP_201_CREATED)
 
