@@ -19,7 +19,7 @@ class Command(BaseCommand):
     def handle_user(self, msg: Message):
         tg_user, created = TgUser.objects.get_or_create(
             tg_user_id=msg.msg_from.id,
-            tg_chat_id=msg.chat.id
+            tg_chat_id=msg.chat.id,
         )
 
         if created:
@@ -41,8 +41,6 @@ class Command(BaseCommand):
         offset = 0
         while True:
             res = self.tg_client.get_updates(offset=offset)
-
             for item in res.result:
                 offset = item.update_id + 1
-                # print(item.message)
                 self.handle_user(item.message)

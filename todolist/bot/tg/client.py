@@ -1,3 +1,4 @@
+import marshmallow_dataclass
 import requests
 
 from bot.tg import dc
