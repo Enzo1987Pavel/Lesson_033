@@ -32,11 +32,11 @@ class Command(BaseCommand):
                      f"{tg_user.verification_code}\n\n"
                      f"на сайте pesaulov87.ga"
             )
-        else:
-            self.tg_client.send_message(
-                chat_id=msg.chat.id,
-                text="Вы уже зарегистророваны😁!"
-            )
+        # else:
+        #     self.tg_client.send_message(
+        #         chat_id=msg.chat.id,
+        #         text="Вы уже активировали аккаунт!"
+        #     )
 
     def handle(self, *args, **options):
         offset = 0
