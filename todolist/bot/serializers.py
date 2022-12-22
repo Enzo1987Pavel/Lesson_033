@@ -4,6 +4,7 @@ from bot.models import TgUser
 
 
 class TgUserSerializer(serializers.ModelSerializer):
+
     class Meta:
-        midel = TgUser
+        model = TgUser
         fields = ("verification_code",)
