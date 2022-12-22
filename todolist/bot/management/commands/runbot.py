@@ -21,7 +21,6 @@ class Command(BaseCommand):
         tg_user, created = TgUser.objects.get_or_create(
             tg_user_id=msg.msg_from.id,
             tg_chat_id=msg.chat.id,
-            tg_username=msg.msg_from.username,
         )
 
         if created:
