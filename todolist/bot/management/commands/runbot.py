@@ -35,8 +35,14 @@ class Command(BaseCommand):
         else:
             self.tg_client.send_message(
                 chat_id=msg.chat.id,
-                text="Вы уже зарегистророваны😁!"
+                text="Вы уже зарегистророваны!"
             )
+
+    def regisrer(self, msg: Message):
+        self.tg_client.send_message(
+            chat_id=msg.chat.id,
+            text="Вы уже зарегистророваны2!"
+        )
 
     def handle(self, *args, **options):
         offset = 0
