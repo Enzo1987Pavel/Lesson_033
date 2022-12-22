@@ -24,6 +24,6 @@ class BotVerificationView(generics.UpdateAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         tg_user.user = self.request.user
-        tg_user.save(update_fields=["user"])
-        tg_client.send_message(chat_id=tg_user.tg_chat_id, text="Good!")
+        tg_user.save()
+        tg_client.send_message(tg_user.tg_chat_id, "Good!")
         return Response(data=data, status=status.HTTP_201_CREATED)
