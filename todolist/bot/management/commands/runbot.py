@@ -108,9 +108,9 @@ class Command(BaseCommand):
         self.tg_client.send_message(
             chat_id=msg.chat.id,
             text=f"📌 Ваш список целей:\n"
-                 f"==================\n"
+                 f"===================\n"
                  f"{goals_str}:\n"
-                 f"==================\n"
+                 f"===================\n"
         )
 
     def handle_message(self, msg: Message):
