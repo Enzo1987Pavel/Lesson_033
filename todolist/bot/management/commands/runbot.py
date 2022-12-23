@@ -67,6 +67,7 @@ class Command(BaseCommand):
             self.get_goal(msg, tg_user)
 
         elif msg.text == "/create":
+            pass
 
         else:
             self.tg_client.send_message(
