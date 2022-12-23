@@ -29,7 +29,7 @@ class Command(BaseCommand):
                  f"=====================\n"
         )
 
-        # ожидания категории от пользователя
+        # ожидание категории от пользователя
         is_running = True
 
         while is_running:
@@ -44,17 +44,35 @@ class Command(BaseCommand):
                         is_running = False
                     elif msg.text == "/cancel":
                         self.tg_client.send_message(
-                            chat_id = msg.chat.id,
+                            chat_id=msg.chat.id,
                             text="Действие отменено ☹!"
                         )
+                        is_running = False
+                    else:
+                        self.tg_client.send_message(
+                            chat_id=msg.chat.id,
+                            text=f"Категории с названием {msg.text} не существует ☹!"
+                        )
+                        is_running = False
 
     def create_goal(self, msg: Message, tg_user: TgUser, category: GoalCategory):
-        self.choose_category(msg, tg_user)
-        # create goal
+        # ожидания цели от пользователя
+        is_running = True
+
+        while is_running:
+            res = self.tg_client.get_updates(offset=offset)
+
+            for item in res.result:
+                offset = item.update_id + 1
+                if hasattr(item, "message"):
+                    self.tg_client.send_message(
+                        chat_id=msg.chat.id,
+                        text="Введите название цели для ее создания!"
+                    )
 
     def get_goal(self, msg: Message, tg_user: TgUser):
         """
-        Отправка всех целей пользователя в Telegram.
+        Получение всех целей пользователя в Telegram.
         Если целей у пользователя нет, то отправить сообщение, что целей нет.
         """
 
@@ -77,7 +95,7 @@ class Command(BaseCommand):
                  f"==================\n"
         )
 
-    def handle_user(self, msg: Message):
+    def handle_message(self, msg: Message):
         tg_user, created = TgUser.objects.get_or_create(
             tg_user_id=msg.msg_from.id,
             tg_chat_id=msg.chat.id,
@@ -97,7 +115,7 @@ class Command(BaseCommand):
             self.get_goal(msg, tg_user)
 
         elif msg.text == "/create":
-            pass
+            self.create_goal()
 
         else:
             self.tg_client.send_message(
@@ -118,4 +136,4 @@ class Command(BaseCommand):
             for item in res.result:
                 offset = item.update_id + 1
                 if hasattr(item, "message"):
-                    self.handle_user(item.message)
+                    self.handle_message(item.message)
