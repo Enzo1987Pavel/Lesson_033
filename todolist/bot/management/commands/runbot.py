@@ -11,10 +11,10 @@ class Command(BaseCommand):
     help = "Runs Telegram bot"
     tg_client = TgClient(settings.BOT_TOKEN)
 
-    def choose_categories(self, msg: Message, tg_user: TgUser):
-        pass
+    # def choose_categories(self, msg: Message, tg_user: TgUser):
+    #     pass
 
-    def get_categories(self, msg: Message, tg_user: TgUser):
+    def choose_category(self, msg: Message, tg_user: TgUser):
         goal_categories = GoalCategory.objects.filter(
             board__participants__user=tg_user.user,
             is_deleted=False,
@@ -24,19 +24,49 @@ class Command(BaseCommand):
         self.tg_client.send_message(
             chat_id=msg.chat.id,
             text=f"🏷 Выберите категорию:\n"
-                 f"====================\n"
-                 f"{goal_categories_srt}:\n"
-                 f"====================\n"
+                 f"=====================\n"
+                 f"{goal_categories_srt}\n"
+                 f"=====================\n"
         )
 
-    def create_goal(self):
-        self.get_categories()
-        self.choose_categories()
-        #create goal
+        # ожидания категории от пользователя
+        is_running = True
+
+        while is_running:
+            res = self.tg_client.get_updates(offset=offset)
+
+            for item in res.result:
+                offset = item.update_id + 1
+                if hasattr(item, "message"):
+                    category = goal_categories.filter(title=msg.text)
+                    if category:
+                        self.create_goal(msg, tg_user, category)
+                        is_running = False
+                    elif msg.text == "/cancel":
+                        self.tg_client.send_message(
+                            chat_id = msg.chat.id,
+                            text="Действие отменено ☹!"
+                        )
+
+    def create_goal(self, msg: Message, tg_user: TgUser, category: GoalCategory):
+        self.choose_category(msg, tg_user)
+        # create goal
 
     def get_goal(self, msg: Message, tg_user: TgUser):
+        """
+        Отправка всех целей пользователя в Telegram.
+        Если целей у пользователя нет, то отправить сообщение, что целей нет.
+        """
+
         goals = Goal.objects.filter(category__board__participants__user=tg_user.user).exclude(
             status=Goal.Status.archived)
+
+        if not goals:
+            self.tg_client.send_message(
+                chat_id=msg.chat.id,
+                text=f"На сегодня целей нет")
+            return None
+
         goals_str = "\n".join(["🔹 " + goal.title for goal in goals])
 
         self.tg_client.send_message(
@@ -72,9 +102,8 @@ class Command(BaseCommand):
         else:
             self.tg_client.send_message(
                 chat_id=msg.chat.id,
-                text=f"⛔ Вы ввели неизвестную команду ( **{msg.text}** )!"
+                text=f"⛔ Вы ввели неизвестную команду ( ** {msg.text} ** )!"
             )
-
         # else:
         #     self.tg_client.send_message(
         #         chat_id=msg.chat.id,
@@ -88,4 +117,5 @@ class Command(BaseCommand):
 
             for item in res.result:
                 offset = item.update_id + 1
-                self.handle_user(item.message)
+                if hasattr(item, "message"):
+                    self.handle_user(item.message)

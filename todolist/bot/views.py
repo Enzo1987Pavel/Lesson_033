@@ -32,5 +32,5 @@ class BotVerificationView(generics.UpdateAPIView):
 
         tg_user.user = self.request.user
         tg_user.save()
-        tg_client.send_message(chat_id=tg_user.tg_chat_id, text=f"Аккаунт подтвержден!")
+        tg_client.send_message(chat_id=tg_user.tg_chat_id, text=f"✅ Аккаунт подтвержден!")
         return Response(data=verif_code, status=status.HTTP_201_CREATED)
