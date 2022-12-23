@@ -14,7 +14,7 @@ class Command(BaseCommand):
         tg_user, created = TgUser.objects.get_or_create(
             tg_user_id=msg.msg_from.id,
             tg_chat_id=msg.chat.id,
-
+            tg_username=msg.chat.username,
         )
 
         if created:
@@ -22,14 +22,14 @@ class Command(BaseCommand):
             self.tg_client.send_message(
                 chat_id=msg.chat.id,
                 text=f"Для подтверждения аккаунта\n"
-                     f"введите код верификации:\n\n"
+                     f"введите код проверки:\n\n"
                      f"{tg_user.verification_code}\n\n"
                      f"на сайте pesaulov87.ga"
             )
         else:
             self.tg_client.send_message(
                 chat_id=msg.chat.id,
-                text="Ваш аккаунт уже активирован!"
+                text="Ваш аккаунт уже был подтвержден!"
             )
 
     def handle(self, *args, **options):

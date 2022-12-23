@@ -19,18 +19,18 @@ class BotVerificationView(generics.UpdateAPIView):
     queryset = TgUser.objects.all()
 
     def patch(self, request, *args, **kwargs):
-        verif_code = self.request.data.get('verification_code')
+        verif_code = self.request.data.get("verification_code")
 
         if not verif_code:
-            raise ValidationError({"verification_code": "No field verification code"})
+            raise ValidationError({"Указан неверный код проверки!"})
 
         tg_client = TgClient(settings.BOT_TOKEN)
         try:
             tg_user = TgUser.objects.get(verification_code=verif_code)
         except self.model.DoesNotExist:
-            raise ValidationError({"verification_code": "No user with verification_code"})
+            raise ValidationError({"Не существует пользователя с таким кодом!"})
 
         tg_user.user = self.request.user
         tg_user.save()
-        tg_client.send_message(chat_id=tg_user.tg_chat_id, text=f"Для подтверждения аккаунта!")
+        tg_client.send_message(chat_id=tg_user.tg_chat_id, text=f"Аккаунт подтвержден!")
         return Response(data=verif_code, status=status.HTTP_201_CREATED)
