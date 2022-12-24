@@ -18,7 +18,7 @@ def test_create(auth_client, new_user, category):
                          'status': 1,
                          'priority': 2,
                          'due_date': None,
-                         'category': category.pk}
+                         "category": category.pk}
 
     assert response.status_code == 201
     assert response.data == expected_response
