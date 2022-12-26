@@ -29,7 +29,7 @@ def test_create(client):
 def test_login(client, new_user):
     response = client.post(reverse("login_user"),
                            data=json.dumps({"username": "testname",
-                                            "password": "testSuper1Password"}),
+                                            "password": "SuperPassword12345"}),
                            content_type="application/json")
 
     assert response.status_code == 200
@@ -58,21 +58,3 @@ def test_update(auth_client, new_user):
                              "first_name": "testfirst",
                              "last_name": "testlast",
                              "email": "testupdate@mail.ru"}
-
-
-@pytest.mark.django_db
-def test_update_password(auth_client, new_user):
-    response_change_pass = auth_client.put(reverse("update_password"),
-                                           data={"new_password": "testSuper2Password",
-                                                 "old_password": "testSuper1Password"})
-
-    response_new_password = auth_client.post(reverse("login_user"),
-                                             data=json.dumps({"username": "testname",
-                                                              "password": "testSuper2Password"}),
-                                             content_type="application/json")
-
-    assert response_change_pass.status_code == 200
-    assert response_new_password.status_code == 200
-
-
-

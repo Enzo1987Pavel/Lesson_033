@@ -10,7 +10,7 @@ def new_user(db):
     user = User.objects.create_user(
         username="testname",
         email="test@mail.ru",
-        password="testSuper1Password"
+        password="SuperPassword12345"
     )
     return user
 
@@ -18,7 +18,7 @@ def new_user(db):
 @pytest.fixture
 def auth_client(new_user):
     client = APIClient()
-    client.login(username="testname", password="testSuper1Password")
+    client.login(username="testname", password="SuperPassword12345")
     return client
 
 

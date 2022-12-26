@@ -38,6 +38,7 @@ class GoalFactory(factory.django.DjangoModelFactory):
 
     title = factory.Faker("name")
 
+
 class CommentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = goal_models.GoalComment
