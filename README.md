@@ -1,5 +1,9 @@
 ﻿# TodoList
 ##
+* Приложение для создания повседневных целей, доступ к которым можно предоставлять другим пользователям, выдавая определенные роли. 
+* Осуществен вход через социальную сеть VK.
+* Аккаунт Telegram привязан к аккаунту приложения. Через Telegram получается просматривать все открытые цели пользователя, создавать цели.
+##
 * ![version](https://img.shields.io/badge/Python-v_3.10-informational/?style=social&logo=Python)
 * ![version](https://img.shields.io/badge/Django-v_4.0.1-informational/?style=social&logo=Django)
 * ![version](https://img.shields.io/badge/PostgreSQL-v_14.6_alpine-informational/?style=social&logo=Postgresql)
