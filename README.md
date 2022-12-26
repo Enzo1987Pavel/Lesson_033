@@ -1,5 +1,4 @@
 ﻿# TodoList
-
 ##
 * ![version](https://img.shields.io/badge/Python-v_3.10-informational/?style=social&logo=Python)
 * ![version](https://img.shields.io/badge/Django-v_4.0.1-informational/?style=social&logo=Django)
