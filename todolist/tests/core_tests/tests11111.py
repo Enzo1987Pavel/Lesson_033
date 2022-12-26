@@ -42,20 +42,4 @@ def test_bad_password():
         assert "Пароли совпадают!"
 
 
-def test_new():
-    try:
-        conn = psycopg2.connect("dbname='postgres' user='postgres' password='postgres'")
-    except:
-        print("Don't connect to DB!")
 
-    cur = conn.cursor()
-
-    try:
-        userrss = []
-        cur.execute("SELECT username FROM core_user")
-        for row in cur:
-            userrss.append(row)
-
-    except:
-        print("No data!")
-    print(str(userrss))
