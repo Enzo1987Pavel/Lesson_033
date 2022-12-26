@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
-from django.utils.crypto import get_random_string
 
 
 class TgUser(models.Model):
