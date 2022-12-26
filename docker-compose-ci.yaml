@@ -43,7 +43,8 @@ services:
       SOCIAL_AUTH_VK_OAUTH2_KEY: ${SOCIAL_AUTH_VK_OAUTH2_KEY}
       SOCIAL_AUTH_VK_OAUTH2_SECRET: ${SOCIAL_AUTH_VK_OAUTH2_SECRET}
       BOT_TOKEN: ${BOT_TOKEN}
-    command: python manage.py runbot
+    command: >
+      bash -c 'python3 manage.py runbot'
 
   migrations:
     image: enzo1987/python_diploma:$GITHUB_REF_NAME-$GITHUB_RUN_ID
