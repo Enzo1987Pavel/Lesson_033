@@ -58,7 +58,7 @@ class Command(BaseCommand):
                         chat_id=item.message.chat.id,
                         text="Неизвестная команда☹!\n\n"
                              "Доступны следующие команды:\n"
-                             "/goals - просмотреть цели\n"
+                             "/goals - просмотр целей\n"
                              "/create - создать цель")
                     continue
 
@@ -124,8 +124,7 @@ class Command(BaseCommand):
 
         tg_client.send_message(chat_id=message.chat.id, text=goals_str)
 
-    def get_goal_categories(self, message: Message, tg_user: TgUser, tg_client: TgClient) -> Optional[
-        List[GoalCategory]]:
+    def get_goal_categories(self, message: Message, tg_user: TgUser, tg_client: TgClient) -> Optional[List[GoalCategory]]:
         """
         Получение всех категорий пользователя в Telegram.
         Если категорий у пользователя нет, то отправить сообщение, что категорий нет.
@@ -135,8 +134,8 @@ class Command(BaseCommand):
         if goal_categories:
             list_goal_categories: list = [goal_category.title for goal_category in goal_categories]
             goal_categories_str: str = f"🏷 Выберите категорию:\n" \
-                                       f"(для отмены действия введите команду /cancel) \n\n" \
-                                       f"\n🔹 " + "\n".join(list_goal_categories)
+                                       f"\n🔹 " + "\n".join(list_goal_categories) + "\n" \
+                                       f"(для отмены действия введите команду /cancel) \n\n"
         else:
             goal_categories_str: str = f"У Вас нет ни одной категории!"
         tg_client.send_message(chat_id=message.chat.id, text=goal_categories_str)
@@ -144,6 +143,9 @@ class Command(BaseCommand):
         return goal_categories
 
     def choose_goal_category(self, tg_client: TgClient, goal_categories: List[GoalCategory]) -> Optional[GoalCategory]:
+        """
+        Выбор категории для цели
+        """
         while True:
             response: GetUpdatesResponse = tg_client.get_updates(offset=self.offset)
             for item in response.result:
