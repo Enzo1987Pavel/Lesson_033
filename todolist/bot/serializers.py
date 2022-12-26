@@ -4,7 +4,7 @@ from bot.models import TgUser
 from bot.tg.client import TgClient
 
 
-class BotVerifyCodeUpdateView(serializers.ModelSerializer):
+class TgUserSerializer(serializers.ModelSerializer):
     user_id = serializers.CurrentUserDefault
     tg_id = serializers.IntegerField(source="tg_user_id")
     username = serializers.CharField(source="tg_username")
