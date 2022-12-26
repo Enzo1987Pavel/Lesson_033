@@ -1,6 +1,5 @@
 from django.conf import settings
 from rest_framework import serializers
-
 from bot.models import TgUser
 from bot.tg.client import TgClient
 
