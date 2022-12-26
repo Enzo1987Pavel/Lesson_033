@@ -18,7 +18,7 @@ class BotVerifyCodeUpdateView(serializers.ModelSerializer):
         instance.user = self.context["request"].user
         instance.save()
         TgClient(token=settings.BOT_TOKEN).send_message(chat_id=instance.tg_chat_id,
-                                                        text="✅ Аккаунт подтвержден!\n"
+                                                        text="✅ Аккаунт успешно подтвержден!\n\n"
                                                              "Доступны следующие команды:\n"
                                                              "/goals - просмотр целей\n"
                                                              "/create - создать цель")
