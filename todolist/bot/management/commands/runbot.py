@@ -32,11 +32,11 @@ class Command(BaseCommand):
                     self.create_tg_user(item.message, tg_client, verification_code)
                     continue
 
-                # Если пользователь не отправил код верификации
-                if tg_user.user_id is None:
-                    verification_code: str = self.generate_verification_code()
-                    self.update_tg_user_verification_code(item.message, tg_client, verification_code)
-                    continue
+                # # Если пользователь не отправил код верификации
+                # if tg_user.user_id is None:
+                #     verification_code: str = self.generate_verification_code()
+                #     self.update_tg_user_verification_code(item.message, tg_client, verification_code)
+                #     continue
 
                 # Пользователь создан в базе данных и подтвердил кодом верификации
                 if item.message.text.strip().lower() == "/goals":
@@ -93,15 +93,15 @@ class Command(BaseCommand):
                                     f"{verification_code}\n\n"
                                     f"на сайте pesaulov87.ga")
 
-    def update_tg_user_verification_code(self, message, tg_client, verification_code) -> None:
-        tg_user: Optional[TgUser] = TgUser.objects.filter(tg_user_id=message.msg_from.id)
-        if tg_user:
-            tg_user.objects.update(
-                verification_code=verification_code
-            )
-            tg_client.send_message(chat_id=message.chat.id,
-                                   text=f"Подтвердите, пожалуйста, аккаунт!\n"
-                                        f"Код проверки: {verification_code}")
+    # def update_tg_user_verification_code(self, message, tg_client, verification_code) -> None:
+    #     tg_user: Optional[TgUser] = TgUser.objects.filter(tg_user_id=message.msg_from.id)
+    #     if tg_user:
+    #         tg_user.objects.update(
+    #             verification_code=verification_code
+    #         )
+    #         tg_client.send_message(chat_id=message.chat.id,
+    #                                text=f"Подтвердите, пожалуйста, аккаунт!\n"
+    #                                     f"Код проверки: {verification_code}")
 
     def get_goals(self, message: Message, tg_user: TgUser, tg_client: TgClient) -> None:
         """
