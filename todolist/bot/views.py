@@ -1,20 +1,24 @@
 from django.conf import settings
 from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from bot.models import TgUser
 
-# from .serializers import TgUserSerializer
+from .serializers import BotVerifyCodeUpdateView
 from .tg.client import TgClient
 
 
 class BotVerificationView(generics.UpdateAPIView):
     model = TgUser
-    permission_classess = [IsAuthenticated]
-    # serializer_class = TgUserSerializer
+    serializer_class = BotVerifyCodeUpdateView
     http_method_names = ["patch"]
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return get_object_or_404(TgUser, verification_code=self.request.data["verification_code"])
 
     queryset = TgUser.objects.all()
 
